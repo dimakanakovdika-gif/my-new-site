@@ -1,7 +1,17 @@
 from django.urls import path
 from . import views
 from . import auth_views
+from django.urls import path
+from django.core.management import call_command
+from django.http import HttpResponse
 
+# Временная функция для запуска миграций через браузер
+def run_migrations(request):
+    try:
+        call_command('migrate', interactive=False)
+        return HttpResponse("Миграции успешно выполнены!")
+    except Exception as e:
+        return HttpR
 urlpatterns = [
     path('', views.home, name='home'),
     path('masters/', views.masters, name='masters'),
