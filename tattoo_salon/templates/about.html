@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}О нас - Tattoo Studio{% endblock %}
+
+{% block content %}
+<div class="hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1544161513-59d06c5c0476?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">О нашей студии</h1>
+        <p class="lead">Профессионализм, качество и безопасность — наши основные принципы</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Наша история -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="section-title">Наша история</h2>
+            <div class="card">
+                <div class="card-body">
+                    <p class="lead">Tattoo Studio была основана в 2015 году группой профессиональных тату-мастеров, которые хотели создать пространство, где искусство татуировки сочетается с высочайшими стандартами безопасности и комфорта.</p>
+                    
+                    <p>За годы работы мы выросли из небольшой студии в один из ведущих тату-салонов города. Наша команда постоянно развивается, посещает международные конференции и мастер-классы, чтобы быть в курсе последних тенденций и технологий в мире татуировки.</p>
+                    
+                    <p>Мы гордимся тем, что создали не просто салон, а творческое сообщество, где каждый клиент получает не только качественную татуировку, но и незабываемый опыт, дружескую атмосферу и профессиональную поддержку на всех этапах — от консультации до полного заживления работы.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="section-title">Мы в цифрах</h2>
+            <div class="row text-center">
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 h-100">
+                        <div class="card-body">
+                            <div class="display-3 fw-bold text-danger">{{ masters_count }}</div>
+                            <h5>Профессиональных мастеров</h5>
+                            <p class="text-muted">Каждый с медицинским образованием и опытом от 5 лет</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 h-100">
+                        <div class="card-body">
+                            <div class="display-3 fw-bold text-danger">{{ portfolio_count }}+</div>
+                            <h5>Успешных работ</h5>
+                            <p class="text-muted">Уникальных татуировок в нашем портфолио</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 h-100">
+                        <div class="card-body">
+                            <div class="display-3 fw-bold text-danger">{{ services_count }}</div>
+                            <h5>Видов услуг</h5>
+                            <p class="text-muted">От консультации до сложных масштабных проектов</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 h-100">
+                        <div class="card-body">
+                            <div class="display-3 fw-bold text-danger">{{ reviews_count }}+</div>
+                            <h5>Довольных клиентов</h5>
+                            <p class="text-muted">Оставили положительные отзывы о нашей работе</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Наши ценности -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="section-title">Наши ценности</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-danger"></i>
+                    </div>
+                    <h4>Безопасность</h4>
+                    <p class="card-text">Используем только одноразовые расходные материалы, сертифицированные краски и строго соблюдаем все санитарные нормы. Каждый мастер имеет медицинское образование.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-paint-brush fa-3x text-danger"></i>
+                    </div>
+                    <h4>Качество</h4>
+                    <p class="card-text">Работаем только с профессиональным оборудованием премиум-класса и материалами от ведущих мировых производителей. Каждая работа — это произведение искусства.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-heart fa-3x text-danger"></i>
+                    </div>
+                    <h4>Индивидуальный подход</h4>
+                    <p class="card-text">Каждый эскиз разрабатывается индивидуально с учетом пожеланий клиента, анатомических особенностей и эстетики. Мы создаем татуировки, которые идеально подходят именно вам.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Наше оборудование -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="section-title">Наше оборудование</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Что мы используем:</h5>
+                            <ul class="mb-0">
+                                <li class="mb-2"><strong>Тату-машинки:</strong> Bishop Rotary, FK Irons, Cheyenne</li>
+                                <li class="mb-2"><strong>Краски:</strong> Eternal Ink, Fusion Ink, World Famous</li>
+                                <li class="mb-2"><strong>Расходные материалы:</strong> одноразовые иглы, картриджи, перчатки</li>
+                                <li class="mb-2"><strong>Стерилизация:</strong> автоклавы класса B, УФ-лампы</li>
+                                <li><strong>Уход:</strong> профессиональные средства для заживления</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Наши стандарты:</h5>
+                            <ul class="mb-0">
+                                <li class="mb-2">Все инструменты одноразовые или проходят полный цикл стерилизации</li>
+                                <li class="mb-2">Работаем только в одноразовых перчатках</li>
+                                <li class="mb-2">Используем индивидуальные наборы для каждого клиента</li>
+                                <li class="mb-2">Помещение обрабатывается после каждого клиента</li>
+                                <li>Регулярные проверки СЭС</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Команда -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="section-title">Наша команда</h2>
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="lead text-center mb-4">Наша команда — это не просто коллектив мастеров, а сообщество единомышленников, объединенных любовью к искусству татуировки и стремлением к профессиональному росту.</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Наши принципы работы:</h5>
+                                    <ul>
+                                        <li class="mb-2">Постоянное обучение и повышение квалификации</li>
+                                        <li class="mb-2">Участие в международных тату-конвенциях</li>
+                                        <li class="mb-2">Обмен опытом внутри команды</li>
+                                        <li class="mb-2">Поддержка и развитие молодых талантов</li>
+                                        <li>Соблюдение профессиональной этики</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Что мы предлагаем мастерам:</h5>
+                                    <ul>
+                                        <li class="mb-2">Современное оборудование и материалы</li>
+                                        <li class="mb-2">Комфортные рабочие места</li>
+                                        <li class="mb-2">Поддержку в профессиональном развитии</li>
+                                        <li class="mb-2">Стабильный поток клиентов</li>
+                                        <li>Дружескую атмосферу и творческую свободу</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Призыв к действию -->
+<div class="bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Хотите стать частью нашей истории?</h2>
+        <p class="lead mb-4">Запишитесь на консультацию и создайте свою уникальную татуировку вместе с нами</p>
+        <div class="d-flex justify-content-center flex-wrap">
+            <a href="{% url 'appointment' %}" class="btn btn-danger btn-lg m-2">
+                <i class="fas fa-calendar-check me-2"></i>Записаться на сеанс
+            </a>
+            <a href="{% url 'portfolio' %}" class="btn btn-outline-light btn-lg m-2">
+                <i class="fas fa-images me-2"></i>Посмотреть работы
+            </a>
+            <a href="{% url 'masters' %}" class="btn btn-outline-light btn-lg m-2">
+                <i class="fas fa-user-tie me-2"></i>Выбрать мастера
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

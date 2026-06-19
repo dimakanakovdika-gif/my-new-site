@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}Отзывы - Tattoo Studio{% endblock %}
+
+{% block content %}
+<div class="hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Отзывы клиентов</h1>
+        <p class="lead">Что говорят о нас наши клиенты</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Статистика отзывов -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="display-4 fw-bold text-danger">{{ reviews.count }}</div>
+                            <p class="mb-0">Всего отзывов</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="display-4 fw-bold text-danger">
+                                {% if reviews.count > 0 %}
+                                    {{ reviews.aggregate.avg_rating|default:"5.0" }}
+                                {% else %}
+                                    5.0
+                                {% endif %}
+                            </div>
+                            <p class="mb-0">Средняя оценка</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="display-4 fw-bold text-danger">{{ masters.count }}</div>
+                            <p class="mb-0">Мастеров с отзывами</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="display-4 fw-bold text-danger">100%</div>
+                            <p class="mb-0">Довольных клиентов</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтр отзывов -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Фильтр отзывов</h5>
+                    <form method="get" class="row g-3">
+                        <div class="col-md-6">
+                            <select name="master" class="form-select">
+                                <option value="">Все мастера</option>
+                                {% for master in masters %}
+                                <option value="{{ master.id }}" {% if selected_master == master.id|stringformat:"i" %}selected{% endif %}>
+                                    {{ master.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="fas fa-filter me-2"></i>Применить фильтр
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список отзывов -->
+    <div class="row">
+        {% for review in reviews %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="card-title mb-1">{{ review.name }}</h5>
+                            {% if review.master %}
+                            <p class="text-muted small mb-0">
+                                <i class="fas fa-user-tie me-1"></i>Мастер: {{ review.master.name }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="text-warning">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="card-text">{{ review.text }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            {{ review.created_at|date:"d.m.Y" }}
+                        </small>
+                        <span class="badge bg-success">
+                            <i class="fas fa-check me-1"></i>Проверенный отзыв
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-comments fa-4x text-muted mb-4"></i>
+                <h3>Пока нет отзывов</h3>
+                <p class="text-muted mb-4">Будьте первым, кто оставит отзыв о нашей работе</p>
+                <a href="{% url 'add_review' %}" class="btn btn-danger">
+                    <i class="fas fa-pen me-2"></i>Оставить отзыв
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Кнопка для добавления отзыва -->
+    {% if reviews %}
+    <div class="text-center mt-5">
+        <a href="{% url 'add_review' %}" class="btn btn-danger btn-lg">
+            <i class="fas fa-pen me-2"></i>Оставить свой отзыв
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Примеры хороших отзывов (запасные) -->
+<div class="bg-light py-5 d-none">
+    <div class="container">
+        <h2 class="text-center mb-4">Примеры отзывов</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-warning mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h5 class="card-title">Анна</h5>
+                        <p class="card-text">"Делала первую татуировку у Алексея. Очень переживала, но мастер успокоил и профессионально все объяснил. Работа выполнена аккуратно, точно по эскизу. Спасибо!"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-warning mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h5 class="card-title">Сергей</h5>
+                        <p class="card-text">"Мария сделала потрясающую акварельную татуировку. Цвета очень яркие, переходы плавные. Оборудование современное, все стерильно. Обязательно вернусь!"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-warning mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h5 class="card-title">Ольга</h5>
+                        <p class="card-text">"Делала японский рукав у Дмитрия. Работа заняла несколько сеансов, но результат превзошел все ожидания! Настоящий профессионал своего дела. Рекомендую!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

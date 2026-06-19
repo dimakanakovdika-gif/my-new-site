@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">FAQ</h1>
+        <p class="text-muted">Отвечаем на популярные вопросы о татуировках</p>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="accordion shadow-sm" id="faqAccordion">
+                {% for faq in faqs %}
+                <div class="accordion-item border-0 mb-2 shadow-sm rounded overflow-hidden">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %} fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
+                            {{ faq.question }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            {{ faq.answer|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Блок Симулятора -->
+            <div class="card mt-5 border-0 shadow-lg text-white rounded-4 overflow-hidden" style="background: linear-gradient(45deg, #1a1a1a, #333);">
+                <div class="card-body p-5 text-center">
+                    <h3 class="fw-bold mb-3">Хотите увидеть тату до сеанса?</h3>
+                    <p class="mb-4 opacity-75">Воспользуйтесь нашим уникальным 3D симулятором, чтобы примерить эскиз онлайн.</p>
+                    <a href="/game/" class="btn nav-game-btn btn-lg px-5 shadow">ПОПРОБОВАТЬ СЕЙЧАС</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'contact' %}" class="btn btn-link text-decoration-none text-muted">Остались вопросы? Напишите нам</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

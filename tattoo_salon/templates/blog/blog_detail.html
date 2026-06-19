@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <article>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="img-fluid rounded mb-4" alt="{{ post.title }}">
+                {% endif %}
+                
+                <h1 class="mb-3">{{ post.title }}</h1>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        {% if post.author %}
+                        <span class="badge bg-secondary">
+                            <i class="fas fa-user"></i> {{ post.author.name }}
+                        </span>
+                        {% endif %}
+                        <span class="ms-3 text-muted">
+                            <i class="fas fa-calendar"></i> {{ post.created_at|date:"d.m.Y" }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="content mb-5">
+                    {{ post.content|linebreaks }}
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Об авторе</h5>
+                        {% if post.author %}
+                        <div class="d-flex align-items-center">
+                            {% if post.author.photo %}
+                            <img src="{{ post.author.photo.url }}" class="rounded-circle me-3" width="80" height="80" style="object-fit: cover;">
+                            {% endif %}
+                            <div>
+                                <h6>{{ post.author.name }}</h6>
+                                <p class="text-muted">{{ post.author.specialization }}</p>
+                                <p>Опыт работы: {{ post.author.experience }} лет</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>Команда Tattoo Studio</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="text-center mt-5">
+                    <a href="{% url 'blog' %}" class="btn btn-outline-dark">
+                        <i class="fas fa-arrow-left"></i> Вернуться к статьям
+                    </a>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white text-center py-4 border-0">
+                    <h3 class="mb-0 fw-bold">Создать аккаунт</h3>
+                    <p class="small opacity-50 mb-0">Присоединяйтесь к нашему комьюнити</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" class="needs-validation">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">{{ field.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-pen-nib"></i></span>
+                                {{ field }} 
+                            </div>
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{% for error in field.errors %}{{ error }}{% endfor %}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                Зарегистрироваться
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4 border-top pt-4">
+                        <p class="text-muted small">Уже есть аккаунт? <a href="{% url 'login' %}" class="fw-bold text-decoration-none">Войти в салон</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Дополнительная ссылка на симулятор -->
+            <div class="text-center mt-4">
+                <a href="/game/" class="text-muted small text-decoration-none hover-primary">
+                   <i class="fas fa-gamepad me-1"></i> Просто хочу посмотреть симулятор
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Стиль для инпутов формы Django */
+    input[type="text"], input[type="password"], input[type="email"], select, textarea {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: var(--text-main);
+        background-color: var(--bg-card);
+        background-clip: padding-box;
+        border: 1px solid var(--border-color);
+        border-left: none; /* для input-group */
+        border-radius: 0 0.5rem 0.5rem 0;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.1);
+    }
+    .hover-primary:hover { color: #007bff !important; }
+</style>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Чат с поддержкой{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-comments me-2"></i>Чат с поддержкой
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Сообщения -->
+                    <div id="chat-messages" class="chat-messages mb-4" style="max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; background: #f8f9fa;">
+                        {% regroup messages by created_at.date as messages_by_date %}
+                        {% for date_group in messages_by_date %}
+                        <div class="date-separator text-center mb-3">
+                            <span class="badge bg-secondary">{{ date_group.grouper|date:"d.m.Y" }}</span>
+                        </div>
+                        {% for message in date_group.list %}
+                        <div class="message mb-3 {% if message.sender == user %}text-end{% else %}text-start{% endif %}">
+                            <div class="d-inline-block p-3 rounded {% if message.sender == user %}bg-primary text-white{% else %}bg-light{% endif %}" style="max-width: 70%;">
+                                <div class="message-text">{{ message.text }}</div>
+                                <small class="{% if message.sender == user %}text-light{% else %}text-muted{% endif %}">
+                                    {{ message.created_at|date:"H:i" }}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        {% if not messages %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-comments fa-3x mb-3"></i>
+                            <p>Нет сообщений. Напишите первое сообщение!</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Форма отправки сообщения -->
+                    <form id="message-form" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            {{ form.text }}
+                            <button type="submit" class="btn btn-primary" id="send-button">
+                                <i class="fas fa-paper-plane"></i> Отправить
+                            </button>
+                        </div>
+                        {% if form.text.errors %}
+                        <div class="text-danger mt-1">{{ form.text.errors }}</div>
+                        {% endif %}
+                    </form>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        Ваши сообщения будут доставлены администратору. Мы ответим в ближайшее время.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+.date-separator {
+    position: relative;
+    margin: 20px 0;
+}
+.date-separator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #dee2e6;
+    z-index: 0;
+}
+.date-separator span {
+    background: white;
+    padding: 0 10px;
+    position: relative;
+    z-index: 1;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageForm = document.getElementById('message-form');
+    const sendButton = document.getElementById('send-button');
+
+    // Автоматическая прокрутка вниз
+    function scrollToBottom() {
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+    scrollToBottom();
+
+    // AJAX отправка сообщения
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(messageForm);
+        const messageText = formData.get('text').trim();
+
+        if (!messageText) return;
+
+        // Отключаем кнопку отправки
+        sendButton.disabled = true;
+        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Добавляем новое сообщение в чат
+                addMessageToChat(data.message, true);
+                // Очищаем форму
+                messageForm.reset();
+                // Прокручиваем вниз
+                scrollToBottom();
+            } else {
+                alert('Ошибка отправки сообщения');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ошибка отправки сообщения');
+        })
+        .finally(() => {
+            // Включаем кнопку обратно
+            sendButton.disabled = false;
+            sendButton.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить';
+        });
+    });
+
+    // Функция добавления сообщения в чат
+    function addMessageToChat(message, isOwn) {
+        const messagesContainer = document.getElementById('chat-messages');
+
+        // Удаляем пустое состояние если есть
+        const emptyState = messagesContainer.querySelector('.text-center.text-muted');
+        if (emptyState) {
+            emptyState.remove();
+        }
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message mb-3 ${isOwn ? 'text-end' : 'text-start'}`;
+
+        const messageContent = `
+            <div class="d-inline-block p-3 rounded ${isOwn ? 'bg-primary text-white' : 'bg-light'}" style="max-width: 70%;">
+                <div class="message-text">${message.text}</div>
+                <small class="${isOwn ? 'text-light' : 'text-muted'}">
+                    ${new Date(message.created_at).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})}
+                </small>
+            </div>
+        `;
+
+        messageDiv.innerHTML = messageContent;
+        messagesContainer.appendChild(messageDiv);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Блог о татуировках{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Блог о татуировках</h1>
+    
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text text-muted">
+                        <small>
+                            <i class="fas fa-user"></i> {{ post.author.name|default:"Администратор" }}
+                            <i class="fas fa-calendar ms-3"></i> {{ post.created_at|date:"d.m.Y" }}
+                        </small>
+                    </p>
+                    <p class="card-text">{{ post.content|truncatechars:150|striptags }}</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{% url 'blog_detail' post.slug %}" class="btn btn-outline-dark btn-sm">Читать далее</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Статьи скоро появятся!
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

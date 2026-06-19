@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Оставить отзыв - Tattoo Studio{% endblock %}
+
+{% block content %}
+<div class="hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1511984804822-e16ba72f5840?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Оставить отзыв</h1>
+        <p class="lead">Поделитесь вашими впечатлениями о нашей работе</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Форма отзыва</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Ваше имя *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger small">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.master.id_for_label }}" class="form-label">Мастер (необязательно)</label>
+                                {{ form.master }}
+                                {% if form.master.errors %}
+                                <div class="text-danger small">{{ form.master.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.rating.id_for_label }}" class="form-label">Оценка *</label>
+                            {{ form.rating }}
+                            {% if form.rating.errors %}
+                            <div class="text-danger small">{{ form.rating.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.text.id_for_label }}" class="form-label">Текст отзыва *</label>
+                            {{ form.text }}
+                            {% if form.text.errors %}
+                            <div class="text-danger small">{{ form.text.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">
+                                Расскажите о вашем опыте: как прошел сеанс, понравилась ли работа мастера, соответствует ли результат ожиданиям.
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>Информация:</h6>
+                            <ul class="mb-0 small">
+                                <li>Ваш отзыв будет опубликован после проверки модератором (обычно в течение 24 часов)</li>
+                                <li>Пожалуйста, оставляйте честные и конструктивные отзывы</li>
+                                <li>Оскорбительные отзывы не будут опубликованы</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Отправить отзыв
+                            </button>
+                            <a href="{% url 'reviews' %}" class="btn btn-outline-dark">
+                                <i class="fas fa-arrow-left me-2"></i>Вернуться к отзывам
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Советы по написанию хорошего отзыва -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-lightbulb text-warning me-2"></i>Советы по написанию отзыва</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Что стоит указать:</h6>
+                            <ul class="small">
+                                <li>Какой мастер делал татуировку</li>
+                                <li>Какой стиль и размер работы</li>
+                                <li>Как прошел сеанс (было ли комфортно)</li>
+                                <li>Соответствует ли результат эскизу</li>
+                                <li>Качество работы мастера</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Пример хорошего отзыва:</h6>
+                            <div class="bg-light p-3 rounded small">
+                                "Делал татуировку дракона в японском стиле у мастера Дмитрия. Сеанс длился 4 часа, было комфортно, мастер постоянно интересовался самочувствием. Работа выполнена очень аккуратно, цвета насыщенные. Рекомендую!"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

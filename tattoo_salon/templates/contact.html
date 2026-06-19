@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero py-5 mb-5" style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1565060059-dd2d6a05e49c?auto=format&fit=crop&w=1920&q=80') center/cover;">
+    <div class="container py-4 text-white text-center">
+        <h1 class="display-4 fw-bold">Свяжитесь с нами</h1>
+        <p class="lead">Мы онлайн и готовы к новым проектам</p>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <!-- Simulator CTA -->
+            <div class="card mb-4 border-0 shadow-sm text-center p-4 bg-light">
+                <i class="fas fa-vr-cardboard fa-3x mb-3 text-primary"></i>
+                <h5>Виртуальный тур</h5>
+                <p class="small text-muted">Осмотрите студию и примерьте тату в нашем симуляторе.</p>
+                <a href="/game/" class="btn btn-dark btn-sm rounded-pill px-4">Вход в симулятор</a>
+            </div>
+            
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body">
+                    <p class="mb-2"><i class="fas fa-map-marker-alt text-danger me-2"></i> г. Москва, ул. Примерная, 123</p>
+                    <p class="mb-2"><i class="fas fa-phone text-success me-2"></i> +7 (999) 123-45-67</p>
+                    <p class="mb-0"><i class="fas fa-envelope text-primary me-2"></i> info@tattoostudio.ru</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow border-0 p-4">
+                <h4 class="mb-4 fw-bold">Напишите нам</h4>
+                <form id="contactForm">
+                    <div class="row g-3">
+                        <div class="col-md-6"><input type="text" class="form-control p-3" placeholder="Имя" required></div>
+                        <div class="col-md-6"><input type="email" class="form-control p-3" placeholder="Email" required></div>
+                        <div class="col-12"><textarea class="form-control p-3" rows="5" placeholder="Ваш вопрос..."></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary btn-lg w-100 p-3 shadow-sm rounded-3">Отправить</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

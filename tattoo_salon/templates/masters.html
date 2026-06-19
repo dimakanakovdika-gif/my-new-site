@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Наши мастера{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1 class="display-4">Наши мастера</h1>
+        <p class="lead">Профессионалы с многолетним опытом</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        {% for master in masters %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="fas fa-user-tie fa-3x text-white"></i>
+                        </div>
+                    </div>
+                    <h4>{{ master.name }}</h4>
+                    <p class="text-muted">Опыт: {{ master.experience }} лет</p>
+                    <p>{{ master.specialization }}</p>
+                    <a href="/appointment/?master={{ master.id }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check me-1"></i>Записаться
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>Мастера скоро появятся</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

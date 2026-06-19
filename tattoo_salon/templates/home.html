@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="hero py-5" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{% static "images/hero.jpg" %}') center/cover;">
+    <div class="container py-5 text-center text-white">
+        <h1 class="display-3 fw-bold mb-3">Tattoo Studio</h1>
+        <p class="lead mb-5 fs-4">Искусство, которое подчеркнет вашу индивидуальность</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="/appointment/" class="btn btn-primary btn-lg px-5 py-3 shadow">Записаться</a>
+            <a href="/game/" class="btn nav-game-btn btn-lg px-5 py-3 shadow">Симулятор 3D</a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5 mt-4 text-center">
+    <h2 class="fw-bold mb-5">Почему выбирают нас</h2>
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="card border-0 h-100">
+                <div class="card-body">
+                    <i class="fas fa-gamepad fa-3x text-warning mb-3"></i>
+                    <h4>Примерка онлайн</h4>
+                    <p class="text-muted">Мы единственный салон с 3D симулятором для предварительного просмотра тату.</p>
+                </div>
+            </div>
+        </div>
+        <!-- ... остальные карточки как в вашем исходнике ... -->
+    </div>
+</div>
+{% endblock %}

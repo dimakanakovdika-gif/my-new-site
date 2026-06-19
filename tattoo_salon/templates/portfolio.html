@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}Портфолио - Tattoo Studio{% endblock %}
+
+{% block content %}
+<style>
+    /* Специфичные стили для портфолио */
+    .portfolio-hero {
+        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1516876437184-593fda40c7ce?auto=format&fit=crop&w=1920&q=80') center/cover;
+        padding: 100px 0 60px;
+        color: white;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .filter-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 25px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin-bottom: 50px;
+    }
+
+    .portfolio-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: var(--bg-card);
+    }
+
+    .portfolio-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .portfolio-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 350px;
+    }
+
+    .portfolio-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .portfolio-card:hover .portfolio-img-wrapper img {
+        transform: scale(1.1);
+    }
+
+    .portfolio-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        opacity: 0;
+        display: flex;
+        align-items: flex-end;
+        padding: 20px;
+        transition: opacity 0.3s ease;
+    }
+
+    .portfolio-card:hover .portfolio-overlay {
+        opacity: 1;
+    }
+
+    .badge-style {
+        background: var(--game-gradient);
+        border-radius: 30px;
+        padding: 5px 15px;
+        font-size: 0.75rem;
+    }
+
+    .modal-content {
+        background-color: var(--bg-card);
+        color: var(--text-main);
+        border-radius: 30px;
+        border: none;
+    }
+
+    .btn-view-all {
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+</style>
+
+<section class="portfolio-hero">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3">Наше Портфолио</h1>
+        <p class="lead opacity-75">Шедевры, созданные нашими мастерами</p>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Секция фильтров -->
+    <div class="filter-section animate-fade">
+        <div class="row align-items-end g-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">СТИЛЬ</label>
+                <select class="form-select border-0 bg-light rounded-pill px-3" id="styleFilter">
+                    <option selected>Все стили</option>
+                    <option>Реализм</option>
+                    <option>Акварель</option>
+                    <option>Минимализм</option>
+                    <option>Олдскул</option>
+                    <option>Японский</option>
+                    <option>Геометрия</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted">МАСТЕР</label>
+                <select class="form-select border-0 bg-light rounded-pill px-3" id="masterFilter">
+                    <option selected>Все мастера</option>
+                    {% for m in masters %} <!-- Предполагаем, что мастера передаются в контекст -->
+                        <option>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-dark btn-view-all w-100 shadow-sm" id="applyFilters">
+                    <i class="fas fa-sliders-h me-2"></i> Применить фильтр
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сетка работ -->
+    <div class="row g-4 mb-5" id="portfolioGrid">
+        {% for item in portfolio %}
+        <div class="col-lg-4 col-md-6 portfolio-item" data-style="{{ item.style }}" data-master="{{ item.master.name }}">
+            <div class="portfolio-card shadow-sm h-100">
+                <div class="portfolio-img-wrapper">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                    {% else %}
+                        <div class="bg-light h-100 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-image fa-3x text-muted opacity-25"></i>
+                        </div>
+                    {% endif %}
+                    <div class="portfolio-overlay">
+                        <button class="btn btn-light btn-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#portfolioModal{{ forloop.counter }}">
+                            Смотреть
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0">{{ item.title }}</h5>
+                        <span class="badge badge-style shadow-sm">{{ item.style|default:"Тату" }}</span>
+                    </div>
+                    <p class="text-muted small mb-3">{{ item.description|truncatechars:80 }}</p>
+                    <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary rounded-circle me-2" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;">
+                                {{ item.master.name|slice:":1" }}
+                            </div>
+                            <span class="small fw-bold">{{ item.master.name }}</span>
+                        </div>
+                        <small class="text-muted">{{ item.created_at|date:"M Y" }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно (улучшенное) -->
+        <div class="modal fade" id="portfolioModal{{ forloop.counter }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content shadow-lg">
+                    <div class="modal-body p-0">
+                        <div class="row g-0">
+                            <div class="col-lg-7">
+                                <img src="{{ item.image.url }}" class="img-fluid w-100 h-100" style="object-fit: cover; min-height: 400px;">
+                            </div>
+                            <div class="col-lg-5 p-4 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4 class="fw-bold mb-0">{{ item.title }}</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <span class="badge bg-light text-dark rounded-pill mb-3">{{ item.style }}</span>
+                                    <p class="text-muted">{{ item.description }}</p>
+                                    
+                                    <div class="mt-4 p-3 bg-light rounded-4">
+                                        <h6 class="small fw-bold mb-1">МАСТЕР</h6>
+                                        <p class="mb-0">{{ item.master.name }} ({{ item.master.experience }} лет опыта)</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="{% url 'appointment' %}?master={{ item.master.id }}" class="btn btn-primary w-100 rounded-pill py-2">
+                                        Записаться к мастеру
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="opacity-25 mb-4">
+                <i class="fas fa-folder-open fa-5x"></i>
+            </div>
+            <h3 class="fw-bold">Галерея пуста</h3>
+            <p class="text-muted">Мы скоро добавим новые работы!</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    {% if portfolio %}
+    <nav class="pb-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link border-0 rounded-circle mx-1" href="#"><i class="fas fa-chevron-left"></i></a></li>
+            <li class="page-item active"><a class="page-link border-0 rounded-circle mx-1" href="#">1</a></li>
+            <li class="page-item"><a class="page-link border-0 rounded-circle mx-1" href="#">2</a></li>
+            <li class="page-item"><a class="page-link border-0 rounded-circle mx-1" href="#"><i class="fas fa-chevron-right"></i></a></li>
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const applyFiltersBtn = document.getElementById('applyFilters');
+    const styleFilter = document.getElementById('styleFilter');
+    const masterFilter = document.getElementById('masterFilter');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    applyFiltersBtn.addEventListener('click', function() {
+        const selectedStyle = styleFilter.value;
+        const selectedMaster = masterFilter.value;
+        
+        portfolioItems.forEach(item => {
+            let showStyle = (selectedStyle === 'Все стили' || item.getAttribute('data-style') === selectedStyle);
+            let showMaster = (selectedMaster === 'Все мастера' || item.getAttribute('data-master') === selectedMaster);
+            
+            if (showStyle && showMaster) {
+                item.style.display = 'block';
+                item.classList.add('animate-fade');
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
